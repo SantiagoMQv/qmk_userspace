@@ -20,7 +20,7 @@
 
 
 /* Tapping configuration for home row mods */
-#define TAPPING_TERM 120
+#define TAPPING_TERM 300
 #define TAPPING_TERM_PER_KEY
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 8
