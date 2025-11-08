@@ -138,7 +138,13 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 #    endif // DILEMMA_AUTO_SNIPING_ON_LAYER
-#endif     // POINTING_DEVICE_ENABLE
+
+// Invert scroll direction only (not cursor movement)
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    mouse_report.v = -mouse_report.v;
+    return mouse_report;
+}
+#endif     // POINTING_DEVICE_ENABLEE
 
 #ifdef RGB_MATRIX_ENABLE
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
@@ -150,15 +156,15 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LGUI_T(KC_A):
         case RGUI_T(KC_SCLN):
-            return 180;
+            return 300;
         case LSFT_T(KC_F):
         case RSFT_T(KC_J):
-            return 120;
+            return 300;
         case LALT_T(KC_S):
         case LCTL_T(KC_D):
         case RCTL_T(KC_K):
         case LALT_T(KC_L):
-            return 200;
+            return 300;
         default:
             return TAPPING_TERM;
     }
