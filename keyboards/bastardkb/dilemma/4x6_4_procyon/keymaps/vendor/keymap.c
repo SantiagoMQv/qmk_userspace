@@ -15,6 +15,59 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+// --- Compat QMK 2024+ (mousekeys renombrados)
+#ifndef MS_BTN1
+  // Si compilas contra ramas antiguas, MS_* puede no existir; en ese caso dejará como KC_*
+  #define MS_BTN1 KC_BTN1
+  #define MS_BTN2 KC_BTN2
+  #define MS_BTN3 KC_BTN3
+  #ifndef KC_WH_U
+    #define KC_WH_U KC_MS_WH_UP
+    #define KC_WH_D KC_MS_WH_DOWN
+  #endif
+#endif
+
+// Si el árbol es 2024+ (Procyon), "KC_BTN*" ya no existe. Crea alias antiguos → nuevos:
+#ifndef KC_BTN1
+  #define KC_BTN1 MS_BTN1
+  #define KC_BTN2 MS_BTN2
+  #define KC_BTN3 MS_BTN3
+#endif
+#ifndef KC_WH_U
+  #define KC_WH_U MS_WH_UP
+  #define KC_WH_D MS_WH_DOWN
+#endif
+
+// --- Compat RGB Matrix (cuando están desactivados los keycodes "RGB_*" compartidos)
+#ifndef RGB_TOG
+  #define RGB_TOG  RM_TOGG
+#endif
+#ifndef RGB_MOD
+  #define RGB_MOD  RM_NEXT
+#endif
+#ifndef RGB_RMOD
+  #define RGB_RMOD RM_PREV
+#endif
+#ifndef RGB_HUI
+  #define RGB_HUI  RM_HUEU
+#endif
+#ifndef RGB_HUD
+  #define RGB_HUD  RM_HUED
+#endif
+#ifndef RGB_SAI
+  #define RGB_SAI  RM_SATU
+#endif
+#ifndef RGB_SAD
+  #define RGB_SAD  RM_SATD
+#endif
+#ifndef RGB_VAI
+  #define RGB_VAI  RM_VALU
+#endif
+#ifndef RGB_VAD
+  #define RGB_VAD  RM_VALD
+#endif
+
 #include QMK_KEYBOARD_H
 
 enum dilemma_keymap_layers {
