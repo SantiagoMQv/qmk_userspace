@@ -16,58 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// --- Compat QMK 2024+ (mousekeys renombrados)
-#ifndef MS_BTN1
-  // Si compilas contra ramas antiguas, MS_* puede no existir; en ese caso dejará como KC_*
-  #define MS_BTN1 KC_BTN1
-  #define MS_BTN2 KC_BTN2
-  #define MS_BTN3 KC_BTN3
-  #ifndef KC_WH_U
-    #define KC_WH_U KC_MS_WH_UP
-    #define KC_WH_D KC_MS_WH_DOWN
-  #endif
-#endif
-
-// Si el árbol es 2024+ (Procyon), "KC_BTN*" ya no existe. Crea alias antiguos → nuevos:
-#ifndef KC_BTN1
-  #define KC_BTN1 MS_BTN1
-  #define KC_BTN2 MS_BTN2
-  #define KC_BTN3 MS_BTN3
-#endif
-#ifndef KC_WH_U
-  #define KC_WH_U MS_WH_UP
-  #define KC_WH_D MS_WH_DOWN
-#endif
-
-// --- Compat RGB Matrix (cuando están desactivados los keycodes "RGB_*" compartidos)
-#ifndef RGB_TOG
-  #define RGB_TOG  RM_TOGG
-#endif
-#ifndef RGB_MOD
-  #define RGB_MOD  RM_NEXT
-#endif
-#ifndef RGB_RMOD
-  #define RGB_RMOD RM_PREV
-#endif
-#ifndef RGB_HUI
-  #define RGB_HUI  RM_HUEU
-#endif
-#ifndef RGB_HUD
-  #define RGB_HUD  RM_HUED
-#endif
-#ifndef RGB_SAI
-  #define RGB_SAI  RM_SATU
-#endif
-#ifndef RGB_SAD
-  #define RGB_SAD  RM_SATD
-#endif
-#ifndef RGB_VAI
-  #define RGB_VAI  RM_VALU
-#endif
-#ifndef RGB_VAD
-  #define RGB_VAD  RM_VALD
-#endif
-
 #include QMK_KEYBOARD_H
 
 enum dilemma_keymap_layers {
@@ -83,10 +31,10 @@ enum dilemma_keymap_layers {
 // #define DILEMMA_AUTO_SNIPING_ON_LAYER LAYER_POINTER
 
 #define MAGIC MO(LAYER_MAGIC)
-#define PROG MO(LAYER_PROGRAMMING)
+#define PROG  MO(LAYER_PROGRAMMING)
 #define NUMBS MO(LAYER_NUMBERS)
-#define NAV LT(LAYER_NAV, KC_BSPC)
-#define PT_Z LT(LAYER_POINTER, KC_Z)
+#define NAV   LT(LAYER_NAV, KC_BSPC)
+#define PT_Z  LT(LAYER_POINTER, KC_Z)
 #define PT_SLSH LT(LAYER_POINTER, KC_SLSH)
 
 #ifndef POINTING_DEVICE_ENABLE
@@ -108,13 +56,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       KC_GRV,    PT_Z,    KC_X,    KC_C,    KC_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT, PT_SLSH, KC_LALT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                      KC_BTN1,  KC_SPC,    PROG,   NUMBS,       MAGIC,  KC_ENT,     NAV,  KC_MUTE
+                      MS_BTN1,  KC_SPC,    PROG,   NUMBS,       MAGIC,  KC_ENT,     NAV,  KC_MUTE
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 
   [LAYER_MAGIC] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-      XXXXXXX, RGB_RMOD, RGB_TOG, RGB_MOD, XXXXXXX, XXXXXXX,    XXXXXXX, RGB_RMOD, RGB_TOG, RGB_MOD, XXXXXXX, XXXXXXX,
+      XXXXXXX, RM_PREV,  RM_TOGG, RM_NEXT, XXXXXXX, XXXXXXX,    XXXXXXX, RM_PREV,  RM_TOGG, RM_NEXT, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       KC_MPRV, KC_VOLD, KC_MUTE, KC_VOLU, KC_MNXT, XXXXXXX,    XXXXXXX, KC_MPRV, KC_VOLD, KC_MUTE, KC_VOLU, KC_MNXT,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
@@ -178,7 +126,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, _______, DRGSCRL, SNIPING, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, SNIPING, DRGSCRL, _______, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                         KC_BTN2, KC_BTN1, KC_BTN3, XXXXXXX,    XXXXXXX, KC_BTN3, KC_BTN1, KC_BTN2
+                         MS_BTN2, MS_BTN1, MS_BTN3, XXXXXXX,    XXXXXXX, MS_BTN3, MS_BTN1, MS_BTN2
   //                    ╰───────────────────────────────────╯ ╰───────────────────────────────────╯
   ),
 };
@@ -226,12 +174,12 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef ENCODER_MAP_ENABLE
 // clang-format off
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [LAYER_BASE]        = {ENCODER_CCW_CW(KC_WH_U, KC_WH_D), ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [LAYER_MAGIC]       = {ENCODER_CCW_CW(RGB_HUD, RGB_HUI), ENCODER_CCW_CW(RGB_SAD, RGB_SAI)},
-    [LAYER_PROGRAMMING] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN), ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [LAYER_NUMBERS]     = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN), ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [LAYER_NAV]         = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN), ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [LAYER_POINTER]     = {ENCODER_CCW_CW(RGB_HUD, RGB_HUI), ENCODER_CCW_CW(RGB_SAD, RGB_SAI)},
+    [LAYER_BASE]        = {ENCODER_CCW_CW(MS_WH_UP, MS_WH_DOWN), ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
+    [LAYER_MAGIC]       = {ENCODER_CCW_CW(RM_HUED, RM_HUEU),     ENCODER_CCW_CW(RM_SATD, RM_SATU)},
+    [LAYER_PROGRAMMING] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN),     ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
+    [LAYER_NUMBERS]     = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN),     ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
+    [LAYER_NAV]         = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN),     ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
+    [LAYER_POINTER]     = {ENCODER_CCW_CW(RM_HUED, RM_HUEU),     ENCODER_CCW_CW(RM_SATD, RM_SATU)},
 };
 // clang-format on
 #endif // ENCODER_MAP_ENABLE
